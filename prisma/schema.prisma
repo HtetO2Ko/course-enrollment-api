@@ -18,6 +18,22 @@ enum Role {
   USER
 }
 
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model Image {
+  imageId   String   @id @default(cuid())
+  url       String
+  key       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  course    Course?
+}
+
 model User {
   userid        String   @id @default(uuid())
   username      String   @unique
@@ -25,6 +41,28 @@ model User {
   fullname      String   
   password      String
   role          Role
+  createdCourses Course[]     @relation("CourseCreator")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model Course {
+  courseid          String @id @default(uuid())
+  title             String
+  level             Level
+  description       String
+  code              String @unique // e.g SE
+  fees              Int
+  duration          Int
+  outlines          String
+  prerequisite      String
+
+  createdby String
+  imageId   String? @unique
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  creator User   @relation("CourseCreator", fields: [createdby], references: [userid], onDelete: Restrict)
+  image   Image? @relation(fields: [imageId], references: [imageId], onDelete: SetNull)
 }
