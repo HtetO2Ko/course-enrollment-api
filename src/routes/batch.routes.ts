@@ -4,19 +4,23 @@ import { BatchService } from "../services/batch.service";
 import { BatchRepo } from "../repositories/batch.repository";
 import { restrictTo, verifyToken } from "../middlewares/auth.middleware";
 
-const router = Router();
-
 const batchRepository = new BatchRepo();
 const batchService = new BatchService(batchRepository);
 const batchController = new BatchController(batchService);
 
-router.use(verifyToken);
-
-router.post("/create", restrictTo("ADMIN"), batchController.create);
-router.get("/get", restrictTo("ADMIN"), batchController.get);
-router.patch("/update", restrictTo("ADMIN"), batchController.update);
-router.delete("/delete", restrictTo("ADMIN"), batchController.delete);
+const router = Router();
 
 router.get("/getBatchesForUser", batchController.getBatchesForUser);
+
+const adminRouter = Router();
+
+adminRouter.use(verifyToken, restrictTo("ADMIN"));
+
+adminRouter.post("/create", batchController.create);
+adminRouter.get("/get", batchController.get);
+adminRouter.patch("/update", batchController.update);
+adminRouter.delete("/delete", batchController.delete);
+
+router.use("/", adminRouter);
 
 export default router;
