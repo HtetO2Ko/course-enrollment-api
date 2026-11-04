@@ -177,7 +177,7 @@ export class AuthService {
 
       const payload = {
         userid: decoded.userid,
-        phoen: decoded.phone,
+        phone: decoded.phone,
         username: decoded.username,
         fullname: decoded.fullname,
         role: decoded.role,
@@ -212,23 +212,20 @@ export class AuthService {
     statusCode: StatusCode;
     success: boolean;
     message: string;
-    data?: { accessToken: string };
+    data?: { refreshToken: string };
   }> {
     try {
-      const decoded = jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET!,
-      ) as UserJwtPayload;
+      const decoded = jwt.decode(refreshToken) as UserJwtPayload;
 
       const payload = {
         userid: decoded.userid,
-        phoen: decoded.phone,
+        phone: decoded.phone,
         username: decoded.username,
         fullname: decoded.fullname,
         role: decoded.role,
       };
 
-      const newAccessToken = jwt.sign(
+      const newRefreshToken = jwt.sign(
         payload,
         process.env.ACCESS_TOKEN_SECRET as string,
         {
@@ -241,7 +238,7 @@ export class AuthService {
         success: true,
         message: "Renew Refresh Token successfully",
         data: {
-          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
         },
       };
     } catch {
