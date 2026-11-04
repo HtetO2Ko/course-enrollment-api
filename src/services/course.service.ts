@@ -19,4 +19,8 @@ export class CourseService {
   public async update(data: TUpdateCourse, courseid: string) {
     return await this.courseRepo.update(data, courseid);
   }
+
+  public async delete(courseid: string) {
+    return await this.courseRepo.delete(courseid);
+  }
 }

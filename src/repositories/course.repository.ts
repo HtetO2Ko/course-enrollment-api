@@ -55,4 +55,12 @@ export class CourseRepo {
       data,
     });
   }
+
+  public async delete(courseid: string) {
+    return await prisma.course.delete({
+      where: {
+        courseid,
+      },
+    });
+  }
 }

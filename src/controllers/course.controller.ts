@@ -3,7 +3,7 @@ import { sendResponse } from "../utils/response.util";
 import { StatusCode } from "../types/response";
 import { getErrorMessage } from "../utils/error";
 import type { CourseService } from "../services/course.service";
-import type { TCreateCourse, TUpdateCourse } from "../types/course";
+import type { TCreateCourse } from "../types/course";
 
 export class CourseController {
   constructor(private courseService: CourseService) {}
@@ -90,10 +90,7 @@ export class CourseController {
     }
   };
 
-  update = async (
-    req: Request<{ courseid: string }, object, TUpdateCourse>,
-    res: Response,
-  ) => {
+  update = async (req: Request, res: Response) => {
     try {
       const courseid =
         typeof req.query.courseid === "string"
@@ -119,6 +116,37 @@ export class CourseController {
       }
 
       const result = await this.courseService.update(data, courseid);
+
+      return sendResponse(res, {
+        data: result,
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Internal Server Error during course update",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
+
+  delete = async (req: Request, res: Response) => {
+    try {
+      const courseid =
+        typeof req.query.courseid === "string"
+          ? req.query.courseid.trim()
+          : undefined;
+
+      if (!courseid) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Missing course id.",
+        });
+      }
+
+      const result = await this.courseService.delete(courseid);
 
       return sendResponse(res, {
         data: result,
