@@ -84,7 +84,7 @@ model Course {
 
 model Batch {
   batchid           String @id @default(uuid())
-  name              String @unique // (0-1 - online 1) (P-1 - in person 1)
+  name              String    
   capacity          Int
   startDate         DateTime? // 13-11-2026
   endDate           DateTime? // 13-11-2026
