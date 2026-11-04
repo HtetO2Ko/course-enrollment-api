@@ -173,4 +173,35 @@ export class BatchController {
       });
     }
   };
+
+  getBatchesForUser = async (req: Request, res: Response) => {
+    try {
+      const status =
+        typeof req.query.status === "string"
+          ? req.query.status.trim()
+          : undefined;
+
+      if (!status) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Missing status.",
+        });
+      }
+
+      const result = await this.batchService.getBatchesForUser(status);
+
+      return sendResponse(res, {
+        data: result,
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Internal Server Error during batch retrieval",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
 }

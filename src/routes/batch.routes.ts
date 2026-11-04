@@ -17,4 +17,6 @@ router.get("/get", restrictTo("ADMIN"), batchController.get);
 router.patch("/update", restrictTo("ADMIN"), batchController.update);
 router.delete("/delete", restrictTo("ADMIN"), batchController.delete);
 
+router.get("/getBatchesForUser", batchController.getBatchesForUser);
+
 export default router;

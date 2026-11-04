@@ -8,7 +8,7 @@ type PaginationMeta = {
   hasPreviousPage: boolean;
 };
 
-type PaginatedResult<T> = {
+export type PaginatedResult<T> = {
   data: T[];
   meta: PaginationMeta;
 };

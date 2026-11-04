@@ -1,11 +1,11 @@
-import type { Prisma } from "../../prisma/generated/prisma/client";
+import type { Batch, Prisma } from "../../prisma/generated/prisma/client";
 import type { UserJwtPayload } from "../types/auth";
 import type {
   BatchFilterQuery,
   TCreateBatch,
   TUpdateBatch,
 } from "../types/batch";
-import { paginate } from "../utils/paginate";
+import { paginate, type PaginatedResult } from "../utils/paginate";
 import { prisma } from "../utils/prisma";
 
 export class BatchRepo {
@@ -74,5 +74,49 @@ export class BatchRepo {
         batchid,
       },
     });
+  }
+
+  public async getBatchesForUser(
+    status: string,
+  ): Promise<Batch[] | PaginatedResult<Batch>> {
+    const where: Prisma.BatchWhereInput = {};
+    const now = new Date();
+
+    if (status === "upcoming") {
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+
+      where.startDate = {
+        gte: tomorrow,
+      };
+
+      return await prisma.batch.findMany({
+        where,
+        include: { course: true },
+        orderBy: { startDate: "asc" },
+      });
+    }
+
+    if (status === "ongoing") {
+      where.startDate = {
+        lte: now,
+      };
+      where.endDate = {
+        gte: now,
+      };
+
+      return await paginate(
+        prisma.batch,
+        { where },
+        { page: 1, perPage: 5 },
+        { course: true },
+        { startDate: "desc" },
+      );
+    }
+
+    throw new Error(
+      "Invalid status provided. Must be 'upcoming' or 'ongoing'.",
+    );
   }
 }
