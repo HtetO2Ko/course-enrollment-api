@@ -14,5 +14,7 @@ router.use(verifyToken);
 
 router.post("/create", restrictTo("ADMIN"), batchController.create);
 router.get("/get", restrictTo("ADMIN"), batchController.get);
+router.patch("/update", restrictTo("ADMIN"), batchController.update);
+router.delete("/delete", restrictTo("ADMIN"), batchController.delete);
 
 export default router;

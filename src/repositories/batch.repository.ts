@@ -1,6 +1,10 @@
 import type { Prisma } from "../../prisma/generated/prisma/client";
 import type { UserJwtPayload } from "../types/auth";
-import type { BatchFilterQuery, TCreateBatch } from "../types/batch";
+import type {
+  BatchFilterQuery,
+  TCreateBatch,
+  TUpdateBatch,
+} from "../types/batch";
 import { paginate } from "../utils/paginate";
 import { prisma } from "../utils/prisma";
 
@@ -51,7 +55,24 @@ export class BatchRepo {
       { where },
       options,
       { course: true },
-      { createdAt: "desc" },
+      { startDate: "desc" },
     );
+  }
+
+  public async update(data: TUpdateBatch, batchid: string) {
+    return await prisma.batch.update({
+      where: {
+        batchid,
+      },
+      data,
+    });
+  }
+
+  public async delete(batchid: string) {
+    return await prisma.batch.delete({
+      where: {
+        batchid,
+      },
+    });
   }
 }

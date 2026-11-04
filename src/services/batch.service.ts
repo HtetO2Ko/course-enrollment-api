@@ -1,6 +1,6 @@
 import type { BatchRepo } from "../repositories/batch.repository";
 import type { UserJwtPayload } from "../types/auth";
-import type { BatchFilterQuery, TCreateBatch } from "../types/batch";
+import type { BatchFilterQuery, TCreateBatch, TUpdateBatch } from "../types/batch";
 
 export class BatchService {
   constructor(private batchRepo: BatchRepo) {
@@ -17,5 +17,13 @@ export class BatchService {
     options: { page?: number; perPage?: number },
   ) {
     return await this.batchRepo.get(filters, options);
+  }
+
+  public async update(data: TUpdateBatch, courseid: string) {
+    return await this.batchRepo.update(data, courseid);
+  }
+
+  public async delete(courseid: string) {
+    return await this.batchRepo.delete(courseid);
   }
 }

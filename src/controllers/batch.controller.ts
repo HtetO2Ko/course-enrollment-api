@@ -101,4 +101,76 @@ export class BatchController {
       });
     }
   };
+
+  update = async (req: Request, res: Response) => {
+    try {
+      const batchid =
+        typeof req.query.batchid === "string"
+          ? req.query.batchid.trim()
+          : undefined;
+
+      if (!batchid) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Missing batch id.",
+        });
+      }
+
+      const data = req.body;
+
+      if (!data || Object.keys(data).length === 0) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "At least one field is required to update.",
+        });
+      }
+
+      const result = await this.batchService.update(data, batchid);
+
+      return sendResponse(res, {
+        data: result,
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Internal Server Error during course update",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
+
+  delete = async (req: Request, res: Response) => {
+    try {
+      const batchid =
+        typeof req.query.batchid === "string"
+          ? req.query.batchid.trim()
+          : undefined;
+
+      if (!batchid) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Missing batch id.",
+        });
+      }
+
+      const result = await this.batchService.delete(batchid);
+
+      return sendResponse(res, {
+        data: result,
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Internal Server Error during course update",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
 }
