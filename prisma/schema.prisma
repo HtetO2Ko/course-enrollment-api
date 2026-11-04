@@ -18,13 +18,88 @@ enum Role {
   USER
 }
 
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum Weekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model Image {
+  imageId       String   @id @default(cuid())
+  url           String
+  key           String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // course     Course?
+}
+
 model User {
   userid        String   @id @default(uuid())
   username      String   @unique
   phone         String   @unique
   fullname      String   
   password      String
-  role          Role
+  role          Role     @default(USER)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  course        Course[] @relation("CourseCreator")
+  batch         Batch[]  @relation("BatchCreator")
+}
+
+model Course {
+  courseid          String @id @default(uuid())
+  code              String @unique // e.g SE
+  title             String
+  level             Level
+  description       String
+  fees              Int
+  duration          Int
+  outlines          String
+  prerequisite      String
+
+  createdBy         String
+  creator           User @relation("CourseCreator", fields: [createdBy], references: [userid], onDelete: Restrict)
+
+  imageId           String? @unique
+  // imageId           String? @unique
+  // image             Image?  @relation(fields: [imageId], references: [imageId], onDelete: SetNull)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  batches           Batch[]
+}
+
+model Batch {
+  batchid           String @id @default(uuid())
+  name              String    
+  capacity          Int
+  startDate         DateTime? // 13-11-2026
+  endDate           DateTime? // 13-11-2026
+
+  classDays         Weekday[]
+
+  classTime         String
+  timezone          String      @default("Asia/Yangon")
+
+  courseId          String  
+  course            Course   @relation(fields: [courseId], references: [courseid], onDelete: Restrict)
+
+  createdBy         String
+  creator           User        @relation("BatchCreator", fields: [createdBy], references: [userid], onDelete: Restrict)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
