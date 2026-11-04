@@ -14,5 +14,6 @@ router.use(verifyToken, restrictTo("ADMIN"));
 
 router.post("/create", courseController.create);
 router.get("/getAll", courseController.getAll);
+router.patch("/update", courseController.update);
 
 export default router;
