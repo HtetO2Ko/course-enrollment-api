@@ -5,12 +5,12 @@ import { prisma } from "../utils/prisma";
 
 export class CourseRepo {
   public async create(courseData: TCreateCourse, reqUser: UserJwtPayload) {
-    const createdby = reqUser.userid;
+    const createdBy = reqUser.userid;
 
     const result = await prisma.course.create({
       data: {
         ...courseData,
-        createdby,
+        createdBy,
       },
     });
     return result;
