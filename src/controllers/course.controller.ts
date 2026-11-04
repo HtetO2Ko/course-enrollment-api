@@ -66,4 +66,27 @@ export class CourseController {
       });
     }
   };
+
+  getAll = async (req: Request, res: Response) => {
+    try {
+      const search =
+        typeof req.query.search === "string"
+          ? req.query.search.trim()
+          : undefined;
+
+      const result = await this.courseService.getAll(search);
+
+      return sendResponse(res, {
+        data: result,
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Internal Server Error during course retrieval",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
 }

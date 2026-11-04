@@ -13,5 +13,6 @@ const courseController = new CourseController(courseService);
 router.use(verifyToken, restrictTo("ADMIN"));
 
 router.post("/create", courseController.create);
+router.get("/getAll", courseController.getAll);
 
 export default router;

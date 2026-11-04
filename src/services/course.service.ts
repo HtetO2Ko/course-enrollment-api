@@ -11,4 +11,8 @@ export class CourseService {
     const create = await this.courseRepo.create(data, reqUser);
     return create;
   }
+
+  public async getAll(search?: string) {
+    return await this.courseRepo.getAll(search);
+  }
 }
