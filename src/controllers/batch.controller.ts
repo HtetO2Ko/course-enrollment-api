@@ -64,4 +64,41 @@ export class BatchController {
       });
     }
   };
+
+  get = async (req: Request, res: Response) => {
+    try {
+      const { search, startDate, courseid, page, limit } = req.query as {
+        search?: string;
+        startDate?: string;
+        courseid?: string;
+        page?: string;
+        limit?: string;
+      };
+
+      const filters = {
+        search,
+        startDate,
+        courseid,
+      };
+
+      const options = {
+        page: page ? Number(page) : 1,
+        perPage: limit ? Number(limit) : 10,
+      };
+
+      const result = await this.batchService.get(filters, options);
+
+      return sendResponse(res, {
+        data: result,
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Internal Server Error during batch retrieval",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
 }

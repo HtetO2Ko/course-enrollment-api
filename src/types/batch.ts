@@ -15,6 +15,12 @@ export interface TCreateBatch {
 
 export type TUpdateBatch = Partial<TCreateBatch>;
 
+export type BatchFilterQuery = {
+  search?: string;
+  startDate?: string;
+  courseid?: string;
+};
+
 // sample requests
 // {
 //   "name": "SE-01",

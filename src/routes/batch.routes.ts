@@ -13,5 +13,6 @@ const batchController = new BatchController(batchService);
 router.use(verifyToken);
 
 router.post("/create", restrictTo("ADMIN"), batchController.create);
+router.get("/get", restrictTo("ADMIN"), batchController.get);
 
 export default router;
