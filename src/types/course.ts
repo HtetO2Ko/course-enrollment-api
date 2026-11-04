@@ -1,6 +1,6 @@
 import type { Level } from "../../prisma/generated/prisma/enums";
 
-export interface TCourse {
+export interface TCreateCourse {
   title: string;
   level: Level;
   description: string;
@@ -12,3 +12,5 @@ export interface TCourse {
 
   imageId: string;
 }
+
+export type TUpdateCourse = Partial<TCreateCourse>;
