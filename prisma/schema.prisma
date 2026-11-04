@@ -69,7 +69,7 @@ model Course {
   outlines          String
   prerequisite      String
 
-  createdBy         String @unique
+  createdBy         String
   creator           User @relation("CourseCreator", fields: [createdBy], references: [userid], onDelete: Restrict)
 
   imageId           String? @unique
@@ -79,12 +79,12 @@ model Course {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  batches           Batch?
+  batches           Batch[]
 }
 
 model Batch {
   batchid           String @id @default(uuid())
-  name              String // (0-1 - online 1) (P-1 - in person 1)
+  name              String @unique // (0-1 - online 1) (P-1 - in person 1)
   capacity          Int
   startDate         DateTime? // 13-11-2026
   endDate           DateTime? // 13-11-2026
@@ -94,7 +94,7 @@ model Batch {
   classTime         String
   timezone          String      @default("Asia/Yangon")
 
-  courseId          String   @unique
+  courseId          String  
   course            Course   @relation(fields: [courseId], references: [courseid], onDelete: Restrict)
 
   createdBy         String
