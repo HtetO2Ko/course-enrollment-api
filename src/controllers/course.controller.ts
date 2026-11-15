@@ -22,7 +22,6 @@ export class CourseController {
         title,
         level,
         description,
-        code,
         fees,
         duration,
         outlines,
@@ -34,7 +33,6 @@ export class CourseController {
         !title ||
         !level ||
         !description ||
-        !code ||
         !fees ||
         !duration ||
         !outlines ||

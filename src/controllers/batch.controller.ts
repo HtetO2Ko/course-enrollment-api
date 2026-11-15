@@ -19,6 +19,7 @@ export class BatchController {
       }
 
       const {
+        batchCode,
         name,
         capacity,
         startDate,
@@ -30,6 +31,7 @@ export class BatchController {
       } = req.body;
 
       if (
+        !batchCode ||
         !name ||
         !capacity ||
         !startDate ||
@@ -43,7 +45,7 @@ export class BatchController {
           statusCode: StatusCode.BAD_REQUEST,
           success: false,
           message:
-            "Missing parameters. name, capacity, startDate, endDate, classDays, classTime, timezone, courseId are required.",
+            "Missing parameters. batchCode, name, capacity, startDate, endDate, classDays, classTime, timezone, courseId are required.",
         });
       }
 
