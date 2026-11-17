@@ -26,7 +26,7 @@ export class CourseController {
         duration,
         outlines,
         prerequisite,
-        imageId,
+        imageURL,
       } = req.body;
 
       if (
@@ -37,13 +37,13 @@ export class CourseController {
         !duration ||
         !outlines ||
         !prerequisite ||
-        !imageId
+        !imageURL
       ) {
         return sendResponse(res, {
           statusCode: StatusCode.BAD_REQUEST,
           success: false,
           message:
-            "Missing parameters. title, level, description, code, fees, duration, outlines, prerequisite, imageId are required.",
+            "Missing parameters. title, level, description, code, fees, duration, outlines, prerequisite, imageURL are required.",
         });
       }
 

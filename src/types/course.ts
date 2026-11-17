@@ -9,7 +9,7 @@ export interface TCreateCourse {
   outlines: string;
   prerequisite: string;
 
-  imageId: string;
+  imageURL: string;
 }
 
 export type TUpdateCourse = Partial<TCreateCourse>;

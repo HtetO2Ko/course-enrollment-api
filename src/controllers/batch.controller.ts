@@ -18,38 +18,31 @@ export class BatchController {
         });
       }
 
-      const {
-        batchCode,
-        name,
-        capacity,
-        startDate,
-        endDate,
-        classDays,
-        classTime,
-        timezone,
-        courseId,
-      } = req.body;
+      const { batchCode, capacity, startDate, classDays, classTime, courseId } =
+        req.body;
 
       if (
         !batchCode ||
-        !name ||
         !capacity ||
         !startDate ||
-        !endDate ||
         !classDays ||
         !classTime ||
-        !timezone ||
         !courseId
       ) {
         return sendResponse(res, {
           statusCode: StatusCode.BAD_REQUEST,
           success: false,
           message:
-            "Missing parameters. batchCode, name, capacity, startDate, endDate, classDays, classTime, timezone, courseId are required.",
+            "Missing parameters. batchCode, name, capacity, startDate, classDays, classTime, courseId are required.",
         });
       }
 
-      const data: TCreateBatch = req.body;
+      const date = new Date(req.body.startDate);
+
+      const data: TCreateBatch = {
+        ...req.body,
+        startDate: date,
+      };
 
       const result = await this.batchService.create(data, req.user);
       return sendResponse(res, {

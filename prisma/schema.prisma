@@ -34,16 +34,6 @@ enum Weekday {
   SUNDAY
 }
 
-model Image {
-  imageId       String   @id @default(cuid())
-  url           String
-  key           String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  // course     Course?
-}
-
 model User {
   userid        String   @id @default(uuid())
   username      String   @unique
@@ -71,9 +61,7 @@ model Course {
   createdBy         String
   creator           User @relation("CourseCreator", fields: [createdBy], references: [userid], onDelete: Restrict)
 
-  imageId           String? @unique
-  // imageId           String? @unique
-  // image             Image?  @relation(fields: [imageId], references: [imageId], onDelete: SetNull)
+  imageURL          String
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -84,15 +72,12 @@ model Course {
 model Batch {
   batchid           String @id @default(uuid())
   batchCode         String @unique
-  name              String    
   capacity          Int
-  startDate         DateTime? // 13-11-2026
-  endDate           DateTime? // 13-11-2026
+  startDate         DateTime // 13-11-2026
 
   classDays         Weekday[]
 
   classTime         String
-  timezone          String      @default("Asia/Yangon")
 
   courseId          String  
   course            Course   @relation(fields: [courseId], references: [courseid], onDelete: Restrict)

@@ -42,7 +42,7 @@ export class BatchRepo {
     if (search) {
       where.OR = [
         {
-          name: {
+          batchCode: {
             contains: search,
             mode: "insensitive",
           },
@@ -101,9 +101,6 @@ export class BatchRepo {
     if (status === "ongoing") {
       where.startDate = {
         lte: now,
-      };
-      where.endDate = {
-        gte: now,
       };
 
       return await paginate(
