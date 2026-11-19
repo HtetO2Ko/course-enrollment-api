@@ -199,4 +199,33 @@ export class BatchController {
       });
     }
   };
+
+  getBatchByID = async (req: Request, res: Response) => {
+    try {
+      const id =
+        typeof req.query.id === "string" ? req.query.id.trim() : undefined;
+
+      if (!id) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Missing id.",
+        });
+      }
+
+      const result = await this.batchService.getBatchByID(id);
+
+      return sendResponse(res, {
+        data: result,
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Internal Server Error during batch retrieval",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
 }

@@ -116,4 +116,13 @@ export class BatchRepo {
       "Invalid status provided. Must be 'upcoming' or 'ongoing'.",
     );
   }
+
+  public async getBatchByID(id: string) {
+    return await prisma.batch.findUnique({
+      where: {
+        batchid: id,
+      },
+      include: { course: true },
+    });
+  }
 }
