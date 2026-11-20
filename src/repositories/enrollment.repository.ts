@@ -86,4 +86,23 @@ export class EnrollmentRepo {
       },
     });
   }
+
+  async removeMine(enrollmentid: string, userid: string) {
+    const enrollment = await prisma.enrollment.findFirst({
+      where: {
+        enrollmentid,
+        enrolledBy: userid,
+      },
+    });
+
+    if (!enrollment) {
+      return null;
+    }
+
+    return prisma.enrollment.delete({
+      where: {
+        enrollmentid,
+      },
+    });
+  }
 }
