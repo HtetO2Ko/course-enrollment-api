@@ -1,5 +1,6 @@
 export type TCreateEnrollment = {
   batchid: string;
+  isWaiting: boolean;
 };
 
 export type TEnrollmentResponse = {

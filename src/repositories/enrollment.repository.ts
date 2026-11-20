@@ -8,7 +8,7 @@ export class EnrollmentRepo {
     enrollmentData: TCreateEnrollment,
     reqUser: UserJwtPayload,
   ) {
-    const { batchid } = enrollmentData;
+    const { batchid, isWaiting } = enrollmentData;
     const enrolledBy = reqUser.userid;
 
     return await prisma.$transaction(
@@ -39,18 +39,18 @@ export class EnrollmentRepo {
         }
 
         const enrollmentCount = await tx.enrollment.count({
-          where: {
-            batchid,
-          },
+          where: { batchid },
         });
 
-        const isWaiting = enrollmentCount >= batch.capacity;
+        // Never allow a normal enrollment when the batch is full.
+        const actualWaitingStatus =
+          isWaiting || enrollmentCount >= batch.capacity;
 
         return await tx.enrollment.create({
           data: {
             batchid,
             enrolledBy,
-            isWaiting,
+            isWaiting: actualWaitingStatus,
           },
         });
       },

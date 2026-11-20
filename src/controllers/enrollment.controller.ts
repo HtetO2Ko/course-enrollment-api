@@ -18,17 +18,24 @@ export class EnrollmentController {
         });
       }
 
-      const { batchid } = req.body;
+      const { batchid, isWaiting } = req.body;
 
-      if (!batchid || typeof batchid !== "string") {
+      if (
+        !batchid ||
+        typeof batchid !== "string" ||
+        typeof isWaiting !== "boolean"
+      ) {
         return sendResponse(res, {
           statusCode: StatusCode.BAD_REQUEST,
           success: false,
-          message: "Batch ID is required.",
+          message: "Batch ID and isWaiting are required.",
         });
       }
 
-      const data: TCreateEnrollment = { batchid: batchid.trim() };
+      const data: TCreateEnrollment = {
+        batchid: batchid.trim(),
+        isWaiting,
+      };
 
       const result = await this.enrollmentService.create(data, req.user);
 
