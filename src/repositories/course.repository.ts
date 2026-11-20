@@ -31,13 +31,7 @@ export class CourseRepo {
                 contains: search,
                 mode: "insensitive",
               },
-            },
-            {
-              code: {
-                contains: search,
-                mode: "insensitive",
-              },
-            },
+            }
           ],
         }
       : {};

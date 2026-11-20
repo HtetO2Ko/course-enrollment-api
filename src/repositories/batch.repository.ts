@@ -42,7 +42,7 @@ export class BatchRepo {
     if (search) {
       where.OR = [
         {
-          name: {
+          batchCode: {
             contains: search,
             mode: "insensitive",
           },
@@ -102,9 +102,6 @@ export class BatchRepo {
       where.startDate = {
         lte: now,
       };
-      where.endDate = {
-        gte: now,
-      };
 
       return await paginate(
         prisma.batch,
@@ -118,5 +115,14 @@ export class BatchRepo {
     throw new Error(
       "Invalid status provided. Must be 'upcoming' or 'ongoing'.",
     );
+  }
+
+  public async getBatchByID(id: string) {
+    return await prisma.batch.findUnique({
+      where: {
+        batchid: id,
+      },
+      include: { course: true },
+    });
   }
 }

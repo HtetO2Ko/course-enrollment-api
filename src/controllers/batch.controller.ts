@@ -18,36 +18,31 @@ export class BatchController {
         });
       }
 
-      const {
-        name,
-        capacity,
-        startDate,
-        endDate,
-        classDays,
-        classTime,
-        timezone,
-        courseId,
-      } = req.body;
+      const { batchCode, capacity, startDate, classDays, classTime, courseId } =
+        req.body;
 
       if (
-        !name ||
+        !batchCode ||
         !capacity ||
         !startDate ||
-        !endDate ||
         !classDays ||
         !classTime ||
-        !timezone ||
         !courseId
       ) {
         return sendResponse(res, {
           statusCode: StatusCode.BAD_REQUEST,
           success: false,
           message:
-            "Missing parameters. name, capacity, startDate, endDate, classDays, classTime, timezone, courseId are required.",
+            "Missing parameters. batchCode, name, capacity, startDate, classDays, classTime, courseId are required.",
         });
       }
 
-      const data: TCreateBatch = req.body;
+      const date = new Date(req.body.startDate);
+
+      const data: TCreateBatch = {
+        ...req.body,
+        startDate: date,
+      };
 
       const result = await this.batchService.create(data, req.user);
       return sendResponse(res, {
@@ -190,6 +185,35 @@ export class BatchController {
       }
 
       const result = await this.batchService.getBatchesForUser(status);
+
+      return sendResponse(res, {
+        data: result,
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Internal Server Error during batch retrieval",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
+
+  getBatchByID = async (req: Request, res: Response) => {
+    try {
+      const id =
+        typeof req.query.id === "string" ? req.query.id.trim() : undefined;
+
+      if (!id) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Missing id.",
+        });
+      }
+
+      const result = await this.batchService.getBatchByID(id);
 
       return sendResponse(res, {
         data: result,

@@ -20,7 +20,7 @@ app.get("/", (_req, res) => {
   sendResponse(res, {
     statusCode: StatusCode.SUCCESS,
     success: true,
-    message: "API V1.0.0 is active and running securely.",
+    message: "Course Enrollment API V1.0.0 is active and running securely.",
   });
 });
 

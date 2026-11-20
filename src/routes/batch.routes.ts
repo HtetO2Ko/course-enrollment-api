@@ -11,6 +11,7 @@ const batchController = new BatchController(batchService);
 const router = Router();
 
 router.get("/getBatchesForUser", batchController.getBatchesForUser);
+router.get("/getBatchByID", batchController.getBatchByID);
 
 const adminRouter = Router();
 

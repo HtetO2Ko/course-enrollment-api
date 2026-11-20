@@ -34,4 +34,8 @@ export class BatchService {
   public async getBatchesForUser(status: string) {
     return await this.batchRepo.getBatchesForUser(status);
   }
+
+  public async getBatchByID(id: string) {
+    return await this.batchRepo.getBatchByID(id);
+  }
 }
