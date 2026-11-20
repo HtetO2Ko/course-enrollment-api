@@ -12,4 +12,8 @@ export class EnrollmentService {
   public async getMyEnrollments(reqUser: UserJwtPayload) {
     return await this.enrollmentRepo.getMyEnrollments(reqUser);
   }
+
+  async removeMine(enrollmentid: string, userid: string) {
+    return this.enrollmentRepo.removeMine(enrollmentid, userid);
+  }
 }

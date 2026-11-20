@@ -14,5 +14,6 @@ router.use(verifyToken, restrictTo("USER"));
 
 router.post("/create", enrollmentController.create);
 router.get("/my-enrollments", enrollmentController.getMyEnrollments);
+router.delete("/:enrollmentid", enrollmentController.removeMine);
 
 export default router;

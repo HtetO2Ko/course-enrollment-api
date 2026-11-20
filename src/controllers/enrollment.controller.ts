@@ -108,4 +108,55 @@ export class EnrollmentController {
       });
     }
   };
+
+  removeMine = async (req: Request, res: Response) => {
+    try {
+      if (!req.user) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Unauthorized.",
+        });
+      }
+
+      const enrollmentid =
+        typeof req.params.enrollmentid === "string"
+          ? req.params.enrollmentid.trim()
+          : "";
+
+      if (!enrollmentid) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Missing enrollment ID.",
+        });
+      }
+
+      const result = await this.enrollmentService.removeMine(
+        enrollmentid,
+        req.user.userid,
+      );
+
+      if (!result) {
+        return sendResponse(res, {
+          statusCode: StatusCode.BAD_REQUEST,
+          success: false,
+          message: "Enrollment not found.",
+        });
+      }
+
+      return sendResponse(res, {
+        data: result,
+        message: "Enrollment cancelled successfully.",
+      });
+    } catch (error: unknown) {
+      return sendResponse(res, {
+        statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "Failed to cancel enrollment.",
+        error:
+          process.env.NODE_ENV === "production" ? null : getErrorMessage(error),
+      });
+    }
+  };
 }
